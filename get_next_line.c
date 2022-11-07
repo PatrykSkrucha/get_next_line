@@ -13,47 +13,70 @@
 #include "get_next_line.h"
 #include <stdio.h>
 #include <string.h>
-#include "../libft/libft.h"
 
-// char	*get_next_line(int fd)
-// {
+int check_for_nl(char *str, int buffer_size)
+{
+	int len = 0;
+	while(str[len])
+	{	
+		if (str[len] == '\n' && len + 1 == buffer_size)
+		{
+			return (-1);
+		}
+		if (str[len] == '\n')
+			return (len);
+		len++;
+	}
+	return (0);
+}
+
+char	*get_next_line(int fd)
+{
+static char	*buffer;
+	static char	*remaining;
+	char *line;
 	
-// }
+	int		nlpos;
+	nlpos = 0;
+	int sz = 0;
+	int check = 0;
+	int buffer_size = 6;
 
-// int check_for_nl(char *str)
-// {
-// 	int len = 0;
-// 	while(str[len])
-// 	{	
-// 		if (str[len] == '\n')
-// 			return (len);
-// 		len+
-// 	}
-// 	return (0);
-// }
+	if(!buffer)
+		buffer = (char*)malloc(buffer_size + 1 * sizeof(char));
+	if(!buffer)
+		return (NULL);
+	while (!check)
+	{
+		sz = read(fd, buffer, buffer_size);
+		printf("%zu\n",strlen(buffer));
+		// nlpos = check_for_nl(buffer, buffer_size);
+		// if (nlpos == -1)
+		// {
+		// 	check = 1;
+			return (buffer);
+		}
+		// else
+		// {
+
+		// 	buffer[0] = 'n';
+		// 	buffer[1] = 'i';
+		// 	buffer[2] = 'c';
+		// 	buffer[3] = '\0';
+		// 	return (buffer);
+		// }
+	// }
+}
 
 int	main()
 {
-	// char	*c;
-	// int		i;
-	// int		fd;
-	// int		nlpos;
-	// nlpos = 0;
-	// int sz = 20;
-	// int check = 0;
-	// int number = BUFFER_SIZE;
+	int		fd;
 
-	// fd = open("test.txt", O_RDONLY);
-	// i = 1;
-	// c = (char*)malloc(number + 1 * sizeof(char));
-	// while (i < number && !check && sz != 0)
-	// {
-	// 	read(fd, c, i);
-	// 	if(check_for_nl(c))
-	// 		break;	
-	// 	i++;
-	// }
-	// close(fd);
-	// free (c);
-	ft_putchar_fd('a', 1);
+	fd = open("test.txt", O_RDONLY);
+	char *str = get_next_line(fd);
+	printf("%s",str);
+	// puts(str);
+	free(str);
+	
+	close(fd);
 }
