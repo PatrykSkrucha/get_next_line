@@ -7,5 +7,8 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
+int		ft_strlcpy(char *dest, char *src, int size);
+char	*ft_strdup(char *src);
+char	*ft_substr(char *s, int start, int len);
 
 #endif

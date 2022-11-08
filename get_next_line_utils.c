@@ -1,21 +1,12 @@
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+int	ft_strlcpy(char *dest, char *src, int size)
 {
-	int	counter;
+	int	i;
+	int	x;
 
-	counter = 0;
-	while (str[counter])
-		counter++;
-	return (counter);
-}
-
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	x;
-
-	x = ft_strlen(src);
+	while (src[x])
+		x++;
 	i = 0;
 	if (size != 0)
 	{
@@ -29,20 +20,42 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 	return (x);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2, int size)
+char	*ft_strdup(char *src)
 {
-	char	*str;
-	size_t	s1_len;
+	char	*a;
+	int		len;
 
-	if (s1 == NULL && s2 == NULL || size == 0)
+	while (src[len])
+		len++;
+	a = (char *)malloc(len + 1);
+	if (a == NULL)
 		return (NULL);
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
-	str = (char *)malloc((s1_len + s2_len + 1) * sizeof(char));
+	ft_strlcpy(a, src, len + 1);
+	return (a);
+}
+
+char	*ft_substr(char *s, int start, int len)
+{
+	int		i;
+	char	*str;
+
+	if (!s)
+		return (NULL);
+	if (s[0] == '\0' || len == 0)
+		return (ft_strdup(""));
+	i = 0;
+	while (s[i])
+		i++;
+	if (start > i)
+		return (ft_strdup(""));
+	i = 0;
+	while (s[start + i])
+		i++;
+	if (i < len)
+		len = i;
+	str = (char *)malloc((len + 1) * sizeof(char));
 	if (str == NULL)
 		return (NULL);
-	ft_strlcpy(str, s1, s1_len + 1);
-	ft_strlcpy(str + s1_len, s2, size + 1);
-	free(s1);
+	ft_strlcpy(str, s + start, len + 1);
 	return (str);
 }

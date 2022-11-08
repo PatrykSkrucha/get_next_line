@@ -32,40 +32,43 @@ int check_for_nl(char *str, int buffer_size)
 
 char	*get_next_line(int fd)
 {
-static char	*buffer;
-	static char	*remaining;
-	char *line;
+	static char	*buffer;
+	char		*remaining;
+	char 		*line;
+	// int			BUFFER_SIZE = 5;
 	
 	int		nlpos;
 	nlpos = 0;
-	int sz = 0;
+	int read_size = 1;
 	int check = 0;
-	int buffer_size = 6;
 
 	if(!buffer)
-		buffer = (char*)malloc(buffer_size + 1 * sizeof(char));
+		buffer = (char*)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if(!buffer)
 		return (NULL);
-	while (!check)
+	while (read_size != 0)
 	{
-		sz = read(fd, buffer, buffer_size);
-		printf("%zu\n",strlen(buffer));
-		// nlpos = check_for_nl(buffer, buffer_size);
-		// if (nlpos == -1)
-		// {
-		// 	check = 1;
+		read_size = read(fd, buffer, BUFFER_SIZE);
+		if (!read_size)
+			return (NULL);
+		buffer[read_size] = '\0';
+		nlpos = check_for_nl(buffer, read_size);
+		if (nlpos == -1)
+		{
+			line = ft_strdup(buffer);
+			free(buffer);
+			return (line);
+		}
+		else
+		{
+
+			buffer[0] = 'n';
+			buffer[1] = 'i';
+			buffer[2] = 'c';
+			buffer[3] = '\0';
 			return (buffer);
 		}
-		// else
-		// {
-
-		// 	buffer[0] = 'n';
-		// 	buffer[1] = 'i';
-		// 	buffer[2] = 'c';
-		// 	buffer[3] = '\0';
-		// 	return (buffer);
-		// }
-	// }
+	}
 }
 
 int	main()
