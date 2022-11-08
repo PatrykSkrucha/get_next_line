@@ -32,20 +32,32 @@ int check_for_nl(char *str, int buffer_size)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer = NULL;
+	static int	leftover;
 	char 		*line;
-	
-	int		nlpos;
-	nlpos = 0;
-	int read_size = 1;
-	line = "";
+	int			nlpos;
+	int 		read_size;
 
-	if(!buffer)
+	read_size = 1;
+	nlpos = 0;
+	line = "";
+	// leftover =
+
+	if (!buffer)
+	{
 		buffer = (char*)malloc((BUFFER_SIZE + 1) * sizeof(char));
+		buffer[0] = '\0';
+	}
 	if(!buffer)
 		return (NULL);
 	while (read_size != 0)
 	{
+		if (ft_strlen(buffer) > 1)
+		{	
+			printf("\n\nbuffer after: [%s]", buffer);
+			line = ft_strdup(buffer);
+			printf("\n\nline after dup: [%s]", line);
+		}
 		read_size = read(fd, buffer, BUFFER_SIZE);
 		if (!read_size)
 		{
@@ -56,20 +68,16 @@ char	*get_next_line(int fd)
 		nlpos = check_for_nl(buffer, read_size);
 		if (nlpos == -1)
 		{
+			
 			line = ft_strdup(buffer);
 			free(buffer);
 			return (line);
 		}
 		else if (nlpos >= 0)
 		{
-			if(line)
-				line = ft_strjoin(line, buffer, nlpos);
-			else
-			{
-				line = (char *)malloc((nlpos + 2) * sizeof(char));
-				ft_strlcpy(line, buffer, nlpos + 1);
-			}
-			buffer = ft_strjoin(NULL, buffer, nlpos);
+			line = ft_strjoin(line, buffer, nlpos + 1);
+			buffer = ft_strjoin(NULL, buffer, nlpos +1);
+			printf("\n\nbuffer before: [%s]", buffer);
 			return (line);
 		}
 		else
@@ -82,12 +90,14 @@ int	main()
 	int		fd;
 
 	fd = open("test.txt", O_RDONLY);
-	char *s = get_next_line(fd);
-	printf("%s",s);
-	s = get_next_line(fd);
-	printf("%s",s);
-	s = get_next_line(fd);
-	printf("%s",s);
+	char *s;
+	int i = 0;
+
+	while (i < 3)
+	{
+		printf("%s",get_next_line(fd));
+		i++;	
+	}
 	// puts(str);
 	free(s);
 	

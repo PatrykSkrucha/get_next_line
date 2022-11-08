@@ -1,14 +1,23 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-int	ft_strlcpy(char *dest, char *src, int size)
+int	ft_strlen(char *str)
+{
+	int	counter;
+
+	counter = 0;
+	while (*str != '\0')
+	{
+		str++;
+		counter++;
+	}
+	return (counter);
+}
+
+void	ft_strlcpy(char *dest, char *src, int size)
 {
 	int	i;
-	int	x;
 
-	x = 0;
-	while (src[x])
-		x++;
 	i = 0;
 	if (size != 0)
 	{
@@ -19,7 +28,6 @@ int	ft_strlcpy(char *dest, char *src, int size)
 		}
 		dest[i] = '\0';
 	}
-	return (x);
 }
 
 char	*ft_strdup(char *src)
@@ -27,9 +35,7 @@ char	*ft_strdup(char *src)
 	char	*a;
 	int		len;
 
-	len = 0;
-	while (src[len])
-		len++;
+	len = ft_strlen(src);
 	a = (char *)malloc(len + 1);
 	if (a == NULL)
 		return (NULL);
@@ -48,9 +54,7 @@ char	*ft_strjoin(char *s1, char *s2, int size)
 		return (ft_strdup(s2 + size));
 	if (s2 == NULL)
 		return (ft_strdup(s1 + size));
-	s1_len = 0;
-	while (s1[s1_len])
-		s1_len++;
+	s1_len = ft_strlen(s1);
 	str = (char *)malloc(s1_len + size + 1);
 	if (str == NULL)
 		return (NULL);
