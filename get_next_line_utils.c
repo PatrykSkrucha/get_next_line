@@ -1,10 +1,12 @@
 #include "get_next_line.h"
+#include <stdio.h>
 
 int	ft_strlcpy(char *dest, char *src, int size)
 {
 	int	i;
 	int	x;
 
+	x = 0;
 	while (src[x])
 		x++;
 	i = 0;
@@ -25,6 +27,7 @@ char	*ft_strdup(char *src)
 	char	*a;
 	int		len;
 
+	len = 0;
 	while (src[len])
 		len++;
 	a = (char *)malloc(len + 1);
@@ -34,28 +37,24 @@ char	*ft_strdup(char *src)
 	return (a);
 }
 
-char	*ft_substr(char *s, int start, int len)
+char	*ft_strjoin(char *s1, char *s2, int size)
 {
-	int		i;
 	char	*str;
+	int	s1_len;
 
-	if (!s)
+	if (s1 == NULL && s2 == NULL)
 		return (NULL);
-	if (s[0] == '\0' || len == 0)
-		return (ft_strdup(""));
-	i = 0;
-	while (s[i])
-		i++;
-	if (start > i)
-		return (ft_strdup(""));
-	i = 0;
-	while (s[start + i])
-		i++;
-	if (i < len)
-		len = i;
-	str = (char *)malloc((len + 1) * sizeof(char));
+	if (s1 == NULL)
+		return (ft_strdup(s2 + size));
+	if (s2 == NULL)
+		return (ft_strdup(s1 + size));
+	s1_len = 0;
+	while (s1[s1_len])
+		s1_len++;
+	str = (char *)malloc(s1_len + size + 1);
 	if (str == NULL)
 		return (NULL);
-	ft_strlcpy(str, s + start, len + 1);
+	ft_strlcpy(str, s1, s1_len + 1);
+	ft_strlcpy(str + s1_len, s2, size + 1);
 	return (str);
 }
