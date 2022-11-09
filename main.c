@@ -2,28 +2,24 @@
 #include <stdio.h>
 #include <fcntl.h> 
 
-int	main(int argc, char **argv)
+int	main()
 {
-	int fd;
-	char *str = "";
-	int n = 1;
+	int		fd;
 
-	if (argc == 2)
-		fd = open(argv[1], O_RDONLY);
-	else
-		fd = 0;
+	fd = open("test.txt", O_RDONLY);
+	char *s;
+	int i = 0;
 
-	if (fd < 0)
-	{
-		printf("File opening unsuccessful!\n");
-		return (-2);
-	}
-
-		str = get_next_line(fd);
-		printf("%s",str);
-		free (str);
-
+	// while (i < 10)
+		s = get_next_line(fd);
+		printf("%s",s);
+		free(s);
+		s = get_next_line(fd);
+		printf("%s",s);
+	// 	i++;	
+	// }
+	// puts(str);
+	free(s);
+	
 	close(fd);
-	// atexit(haha);
-	return (0);
 }

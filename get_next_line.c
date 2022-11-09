@@ -56,24 +56,28 @@ char	*get_next_line(int fd)
 		{	
 			// printf("\n\nbuffer after: [%s]", leftover);
 			line = ft_strdup(leftover);
+			free(leftover);
 			// printf("\n\nline after dup: [%s]", line);
 		}
 		nlpos = check_for_nl(line, ft_strlen(line));
-		if (nlpos && read_size != -1)
+		// printf("pozycja: [%i]", nlpos);
+		if (nlpos)
 		{
 			leftover = ft_strjoin(NULL, line, nlpos);
-			line = ft_strjoin("", line, nlpos);
+			line = ft_strjoin(NULL, line - nlpos, nlpos);
+			// printf("LINE TU: [%s]\n\n\n\n", line);
 			return (line);
 		}
 		else
 		{
-			// printf("tu jestem");
 			read_size = read(fd, buffer, BUFFER_SIZE);
 			buffer[read_size] = '\0';
+			// printf("BUFFER: [%s] \nreadsize: [%i]", buffer, read_size);
 			if (read_size == 0)
 			{
 				free(buffer);
 				free(line);
+				
 				return (NULL);
 			}
 			nlpos = check_for_nl(buffer, read_size);
@@ -84,6 +88,7 @@ char	*get_next_line(int fd)
 				free(leftover);
 				// printf("\nlane: [%s]", line);
 				return (line);
+				// printf("tu jestem");
 			}
 			else if (nlpos >= 0)
 			{
@@ -98,21 +103,3 @@ char	*get_next_line(int fd)
 	}
 }
 
-int	main()
-{
-	int		fd;
-
-	fd = open("test.txt", O_RDONLY);
-	char *s;
-	int i = 0;
-
-	while (i < 10)
-	{
-		printf("%s",get_next_line(fd));
-		i++;	
-	}
-	// puts(str);
-	free(s);
-	
-	close(fd);
-}
