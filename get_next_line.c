@@ -83,8 +83,9 @@ char	*get_next_line(int fd)
 			// printf("BUFFER: [%s] \nreadsize: [%i]", buffer, read_size);
 			if (read_size == 0)
 			{
-				free(buffer);
-				return (line);
+				if(ft_strlen(line))
+					return (line);
+				return (NULL);
 			}
 			nlpos = check_for_nl(buffer, read_size);
 			if (nlpos == -1)
