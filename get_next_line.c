@@ -37,6 +37,7 @@ char	*get_next_line(int fd)
 	char 		*line;
 	int			nlpos;
 	int 		read_size;
+	char		*temp;
 
 	read_size = -1;
 	nlpos = 0;
@@ -61,10 +62,17 @@ char	*get_next_line(int fd)
 		}
 		nlpos = check_for_nl(line, ft_strlen(line));
 		// printf("pozycja: [%i]", nlpos);
-		if (nlpos)
+		if (nlpos >= 0)
 		{
-			leftover = ft_strjoin(NULL, line, nlpos);
-			line = ft_strjoin(NULL, line - nlpos, nlpos);
+			// printf("tu");
+			leftover = ft_strjoin(NULL, line, nlpos + 1);
+			temp = ft_strdup(line);
+			free(line);
+			line =(char *) malloc ((nlpos + 2) * sizeof(char));
+			ft_strlcpy(line, temp, nlpos + 2);
+			free(temp);
+			// printf("linee: [%s]", line);
+
 			// printf("LINE TU: [%s]\n\n\n\n", line);
 			return (line);
 		}
