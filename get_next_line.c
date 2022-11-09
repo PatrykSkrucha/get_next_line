@@ -84,9 +84,7 @@ char	*get_next_line(int fd)
 			if (read_size == 0)
 			{
 				free(buffer);
-				free(line);
-				
-				return (NULL);
+				return (line);
 			}
 			nlpos = check_for_nl(buffer, read_size);
 			if (nlpos == -1)
