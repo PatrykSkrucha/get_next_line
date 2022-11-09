@@ -55,7 +55,7 @@ char	*get_next_line(int fd)
 	{
 		if (leftover)
 		{	
-			// printf("\n\nbuffer after: [%s]", leftover);
+			// printf("\n\nbuffer after: [%i]", read_size);
 			line = ft_strdup(leftover);
 			free(leftover);
 			// printf("\n\nline after dup: [%s]", line);
@@ -90,10 +90,13 @@ char	*get_next_line(int fd)
 			nlpos = check_for_nl(buffer, read_size);
 			if (nlpos == -1)
 			{
-				line = ft_strjoin(line, buffer, ft_strlen(buffer));
+				// printf("\nlane przed: [%i]\n\n", ft_strlen(buffer));
+				temp = ft_strdup(line);
+				free(line);
+				line = ft_strjoin(temp, buffer, ft_strlen(buffer));
 				free(buffer);
+				free(temp);
 				free(leftover);
-				// printf("\nlane: [%s]", line);
 				return (line);
 				// printf("tu jestem");
 			}
