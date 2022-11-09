@@ -32,13 +32,13 @@ int check_for_nl(char *str, int buffer_size)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer = NULL;
-	static int	leftover;
+	char	*buffer = NULL;
+	static char	*leftover;
 	char 		*line;
 	int			nlpos;
 	int 		read_size;
 
-	read_size = 1;
+	read_size = -1;
 	nlpos = 0;
 	line = "";
 	// leftover =
@@ -52,36 +52,49 @@ char	*get_next_line(int fd)
 		return (NULL);
 	while (read_size != 0)
 	{
-		if (ft_strlen(buffer) > 1)
+		if (leftover)
 		{	
-			printf("\n\nbuffer after: [%s]", buffer);
-			line = ft_strdup(buffer);
-			printf("\n\nline after dup: [%s]", line);
+			// printf("\n\nbuffer after: [%s]", leftover);
+			line = ft_strdup(leftover);
+			// printf("\n\nline after dup: [%s]", line);
 		}
-		read_size = read(fd, buffer, BUFFER_SIZE);
-		if (!read_size)
+		nlpos = check_for_nl(line, ft_strlen(line));
+		if (nlpos && read_size != -1)
 		{
-			free(buffer);
-			return (line);
-		}
-		buffer[read_size] = '\0';
-		nlpos = check_for_nl(buffer, read_size);
-		if (nlpos == -1)
-		{
-			
-			line = ft_strdup(buffer);
-			free(buffer);
-			return (line);
-		}
-		else if (nlpos >= 0)
-		{
-			line = ft_strjoin(line, buffer, nlpos + 1);
-			buffer = ft_strjoin(NULL, buffer, nlpos +1);
-			printf("\n\nbuffer before: [%s]", buffer);
+			leftover = ft_strjoin(NULL, line, nlpos);
+			line = ft_strjoin("", line, nlpos);
 			return (line);
 		}
 		else
-			line = ft_strdup(buffer);
+		{
+			// printf("tu jestem");
+			read_size = read(fd, buffer, BUFFER_SIZE);
+			buffer[read_size] = '\0';
+			if (read_size == 0)
+			{
+				free(buffer);
+				free(line);
+				return (NULL);
+			}
+			nlpos = check_for_nl(buffer, read_size);
+			if (nlpos == -1)
+			{
+				line = ft_strjoin(line, buffer, ft_strlen(buffer));
+				free(buffer);
+				free(leftover);
+				// printf("\nlane: [%s]", line);
+				return (line);
+			}
+			else if (nlpos >= 0)
+			{
+				line = ft_strjoin(line, buffer, nlpos + 1);
+				leftover = ft_strjoin(NULL, buffer, nlpos + 1);
+				// printf("\nlane: [%s]", line);
+				return (line);
+			}
+			else
+				leftover = ft_strjoin(line, buffer, ft_strlen(buffer));
+		}
 	}
 }
 
@@ -93,7 +106,7 @@ int	main()
 	char *s;
 	int i = 0;
 
-	while (i < 3)
+	while (i < 10)
 	{
 		printf("%s",get_next_line(fd));
 		i++;	
