@@ -42,7 +42,6 @@ char	*get_next_line(int fd)
 	char		*temp;
 	int			control;
 
-	control = 1;
 	read_size = -1;
 	line = ft_strdup("");
 
@@ -64,6 +63,7 @@ char	*get_next_line(int fd)
 			free(buffer);
 			buffer = ft_strjoin(NULL, temp, check_for_nl(temp) + 1);
 			free(temp);
+			control = 1;
 			return (line);
 		}
 		if (check_for_nl(buffer) == -2 )
@@ -72,6 +72,7 @@ char	*get_next_line(int fd)
 			line = ft_strjoin(temp, buffer, ft_strlen(buffer));
 			free(temp);
 			free(buffer);
+			control = 1;
 			return (line);
 		}
 		if (check_for_nl(buffer) == -1 && control)
@@ -80,12 +81,15 @@ char	*get_next_line(int fd)
 			free(line);
 			line = ft_strjoin(temp, buffer, ft_strlen(buffer));
 			free(temp);
-			control = 0;;
+			//printf("[%s]", line);
+			control = 0;
 		}
-		else
+		if (!control)
 		{
 			read_size = read(fd, buffer, BUFFER_SIZE);
 			buffer[read_size] = '\0';
+			control = 1;
+			//printf("[%s]", buffer);
 			if (read_size == 0)
 			{
 				if (ft_isprint(buffer[0]))
