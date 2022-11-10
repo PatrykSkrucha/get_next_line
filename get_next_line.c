@@ -14,35 +14,37 @@
 #include <stdio.h>
 #include <string.h>
 
-int check_for_nl(char *str, int buffer_size)
+int check_for_nl(char *str)
 {
-	int len = 0;
+	int len;
+
+	if (!str)
+		return (-3);
+	len = 0;
 	while(str[len])
 	{	
-		if (str[len] == '\n' && len + 1 == buffer_size)
+		if (str[len] == '\n' && len + 1 == ft_strlen(str))
 		{
-			return (-1);
+			return (-2);
 		}
 		if (str[len] == '\n')
 			return (len);
 		len++;
 	}
-	return (-2);
+	return (-1);
 }
 
 char	*get_next_line(int fd)
 {
-	char	*buffer = NULL;
-	static char	*leftover;
+	static char	*buffer;
 	char 		*line;
-	int			nlpos;
 	int 		read_size;
 	char		*temp;
+	int			control;
 
+	control = 1;
 	read_size = -1;
-	nlpos = 0;
-	line = "";
-	// leftover =
+	line = ft_strdup("");
 
 	if (!buffer)
 	{
@@ -51,65 +53,61 @@ char	*get_next_line(int fd)
 	}
 	if(!buffer)
 		return (NULL);
-	while (read_size != 0)
+	while (1)
 	{
-		if (leftover)
+		if (check_for_nl(buffer) >= 0)
 		{	
-			// printf("\n\nbuffer after: [%i]", read_size);
-			line = ft_strdup(leftover);
-			free(leftover);
-			// printf("\n\nline after dup: [%s]", line);
-		}
-		nlpos = check_for_nl(line, ft_strlen(line));
-		// printf("pozycja: [%i]", nlpos);
-		if (nlpos >= 0)
-		{
-			// printf("tu");
-			leftover = ft_strjoin(NULL, line, nlpos + 1);
 			temp = ft_strdup(line);
 			free(line);
-			line =(char *) malloc ((nlpos + 2) * sizeof(char));
-			ft_strlcpy(line, temp, nlpos + 2);
+			line = ft_strjoin(temp, buffer, check_for_nl(buffer) + 1);
+			temp = ft_strdup(buffer);
+			free(buffer);
+			buffer = ft_strjoin(NULL, temp, check_for_nl(temp) + 1);
 			free(temp);
-			// printf("linee: [%s]", line);
-
-			// printf("LINE TU: [%s]\n\n\n\n", line);
 			return (line);
+		}
+		if (check_for_nl(buffer) == -2 )
+		{
+			temp = ft_strdup(line);
+			line = ft_strjoin(temp, buffer, ft_strlen(buffer));
+			free(temp);
+			free(buffer);
+			return (line);
+		}
+		if (check_for_nl(buffer) == -1 && control)
+		{
+			temp = ft_strdup(line);
+			//printf("line: [%s]", buffer);
+			free(line);
+			line = ft_strjoin(temp, buffer, ft_strlen(buffer));
+			free(temp);
+			//free(buffer);
+			control = 0;
+			//printf("tu jestem");
 		}
 		else
 		{
 			read_size = read(fd, buffer, BUFFER_SIZE);
 			buffer[read_size] = '\0';
-			// printf("BUFFER: [%s] \nreadsize: [%i]", buffer, read_size);
+			control = 1;
+			//printf("buffer: [%s]", buffer);
 			if (read_size == 0)
 			{
-				if(ft_strlen(line))
+				if (ft_isprint(buffer[0]))
+				{
+					temp = ft_strdup(line);
+					free(line);
+					line = ft_strjoin(temp, buffer, ft_strlen(buffer));
+					free(buffer);
+					free(temp);
 					return (line);
-				return (NULL);
+					
+				}
+					return (NULL);
+				//printf("tu");
 			}
-			nlpos = check_for_nl(buffer, read_size);
-			if (nlpos == -1)
-			{
-				// printf("\nlane przed: [%i]\n\n", ft_strlen(buffer));
-				temp = ft_strdup(line);
-				free(line);
-				line = ft_strjoin(temp, buffer, ft_strlen(buffer));
-				free(buffer);
-				free(temp);
-				free(leftover);
-				return (line);
-				// printf("tu jestem");
-			}
-			else if (nlpos >= 0)
-			{
-				line = ft_strjoin(line, buffer, nlpos + 1);
-				leftover = ft_strjoin(NULL, buffer, nlpos + 1);
-				// printf("\nlane: [%s]", line);
-				return (line);
-			}
-			else
-				leftover = ft_strjoin(line, buffer, ft_strlen(buffer));
 		}
 	}
+	//return (buffer);
 }
 

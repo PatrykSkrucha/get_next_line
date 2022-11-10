@@ -11,5 +11,6 @@ char	*ft_strdup(char *src);
 char	*ft_strjoin(char *s1, char *s2, int size);
 void	ft_strlcpy(char *dest, char *src, int size);
 int	ft_strlen(char *str);
+int	ft_isprint(int c);
 
 #endif
