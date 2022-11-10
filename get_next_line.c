@@ -77,20 +77,15 @@ char	*get_next_line(int fd)
 		if (check_for_nl(buffer) == -1 && control)
 		{
 			temp = ft_strdup(line);
-			//printf("line: [%s]", buffer);
 			free(line);
 			line = ft_strjoin(temp, buffer, ft_strlen(buffer));
 			free(temp);
-			//free(buffer);
-			control = 0;
-			//printf("tu jestem");
+			control = 0;;
 		}
 		else
 		{
 			read_size = read(fd, buffer, BUFFER_SIZE);
 			buffer[read_size] = '\0';
-			control = 1;
-			//printf("buffer: [%s]", buffer);
 			if (read_size == 0)
 			{
 				if (ft_isprint(buffer[0]))
@@ -109,10 +104,8 @@ char	*get_next_line(int fd)
 						return (line);
 					}
 				return (NULL);
-				//printf("tu");
 			}
 		}
 	}
-	//return (buffer);
 }
 
