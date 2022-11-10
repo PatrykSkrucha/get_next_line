@@ -10,7 +10,7 @@ int	main()
 	char *s;
 	int i = 0;
 
-	 while (i < 14)
+	 while (i < 13)
 	 {
 		s = get_next_line(fd);
 		printf("%s",s);

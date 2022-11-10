@@ -103,7 +103,12 @@ char	*get_next_line(int fd)
 					return (line);
 					
 				}
-					return (NULL);
+				if (ft_strlen(line) >= BUFFER_SIZE)
+					{
+						free(buffer);
+						return (line);
+					}
+				return (NULL);
 				//printf("tu");
 			}
 		}

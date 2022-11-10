@@ -1,20 +1,12 @@
+On success, the number of bytes read is returned (zero indicates
+       end of file), and the file position is advanced by this number.
+       It is not an error if this number is smaller than the number of
+       bytes requested; this may happen for example because fewer bytes
+       are actually available right now (maybe because we were close to
+       end-of-file, or because we are reading from a pipe, or from a
+       terminal), or because read() was interrupted by a signal.  See
+       also NOTES.
 
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_isprint.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pskrucha <pskrucha@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 16:49:33 by pskrucha          #+#    #+#             */
-/*   Updated: 2022/10/26 11:00:36 by pskrucha         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-int	ft_isprint(int c)
-{
-	if (c >= 32 && c <= 126)
-		return (1);
-	else
-		return (0);
-}
+       On error, -1 is returned, and errno is set to indicate the error.
+       In this case, it is left unspecified whether the file position
+       (if any) changes.
