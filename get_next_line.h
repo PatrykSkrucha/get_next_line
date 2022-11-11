@@ -4,13 +4,13 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
-# include <unistd.h>
+#include <stdio.h>
 
-char	*get_next_line(int fd);
+int	ft_strlen(char *str);
+void	ft_strlcpy(char *dest, char *src, int size);
 char	*ft_strdup(char *src);
 char	*ft_strjoin(char *s1, char *s2, int size);
-void	ft_strlcpy(char *dest, char *src, int size);
-int	ft_strlen(char *str);
-int	ft_isprint(int c);
+int check_for_nl(char *str);
+char	*get_next_line(int fd);
 
 #endif
