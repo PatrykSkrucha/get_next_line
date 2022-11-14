@@ -1,4 +1,5 @@
 #include "get_next_line.h"
+#include <string.h>
 
 int check_for_nl(char *str)
 {
@@ -25,11 +26,11 @@ char	*get_next_line(int fd)
 	static char	*buffer;
 	char 		*line;
 	int 		read_size;
-	char		*temp;
 	int			check = 1;
 
 	read_size = 1;
-	line = ft_strdup("");
+	line = malloc(1);
+	line[0] = 0;
 	if (!buffer)
 	{
 		buffer = (char*)malloc((BUFFER_SIZE + 1) * sizeof(char));
@@ -42,35 +43,19 @@ char	*get_next_line(int fd)
 	{
 		if (check_for_nl(buffer) == -2 )
 		{
-			temp = ft_strdup(line);
-			free(line);
-			temp = ft_strjoin(line, buffer, ft_strlen(buffer));
-			buffer = NULL;
+			line = update_line(line, buffer, ft_strlen(buffer));
 			free(buffer);
-			check = 0;
-			return (temp);
+			buffer = NULL;
+			return (line);
 		}
 		if (check_for_nl(buffer) >= 0)
-		{	
-			temp = ft_strdup(line);
-			free(line);
-			line = ft_strjoin(temp, buffer, check_for_nl(buffer) + 1);
-			free(temp);
-			temp = ft_strdup(buffer);
-			free(buffer);
-			buffer = ft_strjoin(NULL, temp, check_for_nl(temp) + 1);
-			free(temp);
-			check = 1;
+		{		
+			line = update_line(line, buffer, check_for_nl(buffer) + 1);
+			update_buffer(buffer, check_for_nl(buffer) + 1);
 			return (line);
 		}
 		if (check_for_nl(buffer) == -1 && check)
-		{
-			temp = ft_strdup(line);
-			free(line);
-			line = ft_strjoin(temp, buffer, ft_strlen(buffer));
-			free(temp);
-			check = 0;
-		}
+			line = update_line(line, buffer, ft_strlen(buffer));
 		read_size = read(fd, buffer, BUFFER_SIZE);
 		buffer[read_size] = '\0';
 		if (read_size != 0)
@@ -78,11 +63,9 @@ char	*get_next_line(int fd)
 		if (read_size <= 0)
 		{
 			if (ft_strlen(line))
-				{
-					
-					free(buffer);
-					return (line);
-				}
+				return (line);
+			free(buffer);
+			free(line);
 			return (NULL);
 		}
 	}
@@ -92,7 +75,7 @@ int	main()
 {
 	int		fd;
 
-	fd = open("./test.txt", O_RDONLY);
+	fd = open("./test9000.txt", O_RDONLY);
 	char *s = "";
 	int i = 1;
 

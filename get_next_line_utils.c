@@ -4,6 +4,8 @@ int	ft_strlen(char *str)
 {
 	int	counter;
 
+	if (!str)
+		return (0);
 	counter = 0;
 	while (*str != '\0')
 	{
@@ -29,35 +31,49 @@ void	ft_strlcpy(char *dest, char *src, int size)
 	}
 }
 
-char	*ft_strdup(char *src)
-{
-	char	*a;
-	int		len;
-
-	len = ft_strlen(src);
-	a = (char *)malloc(len + 1);
-	if (a == NULL)
-		return (NULL);
-	ft_strlcpy(a, src, len + 1);
-	return (a);
-}
-
-char	*ft_strjoin(char *s1, char *s2, int size)
+char	*update_line(char *s1, char *s2, int len)
 {
 	char	*str;
-	int	s1_len;
+	int		s1_len;
 
-	if (s1 == NULL && s2 == NULL)
-		return (NULL);
-	if (s1 == NULL)
-		return (ft_strdup(s2 + size));
-	if (s2 == NULL)
-		return (ft_strdup(s1 + size));
 	s1_len = ft_strlen(s1);
-	str = (char *)malloc(s1_len + size + 1);
+	str = (char *)malloc(s1_len + len + 1);
 	if (str == NULL)
 		return (NULL);
 	ft_strlcpy(str, s1, s1_len + 1);
-	ft_strlcpy(str + s1_len, s2, size + 1);
+	ft_strlcpy(str + s1_len, s2, len + 1);
+	free(s1);
 	return (str);
 }
+
+void update_buffer(char *buffer, int nlpos)
+{
+	//char	*new_buffer;
+	//int len = ft_strlen(buffer+nlpos);
+int i=0;
+	//new_buffer = (char*)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	//if (!new_buffer)
+	//	return (NULL);
+	//ft_strlcpy(new_buffer, buffer + nlpos, len + 1);
+	//free(buffer);
+	while(buffer[nlpos+i])
+	{
+		buffer[i] = buffer[nlpos + i];
+		i++;
+	}
+
+	buffer[i] = '\0';
+	//return (new_buffer);
+}
+
+//void update_buffer(char *buffer, int nlpos)
+//{
+//	int		i;
+	
+//	i = 0;;
+//	while(buffer[nlpos+i] != '\0')
+//	{
+//		buffer[i] = buffer[nlpos + i ];
+//		i++;
+//	}
+//}
