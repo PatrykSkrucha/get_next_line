@@ -28,6 +28,8 @@ char	*get_next_line(int fd)
 	int 		read_size;
 	int			check = 1;
 
+	if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	read_size = 1;
 	line = malloc(1);
 	line[0] = 0;
@@ -41,6 +43,27 @@ char	*get_next_line(int fd)
 		return (NULL);
 	while (1)
 	{
+		if(!check)
+		{
+			read_size = read(fd, buffer, BUFFER_SIZE);
+			if(buffer[0]=='\0')
+			{
+				//free(buffer);
+				free(line);
+				return (NULL);
+			}
+			if(read_size >= 0)
+				buffer[read_size] = '\0';
+			if (read_size <= 0)
+			{
+				if (ft_strlen(line))
+						return (line);
+				free(buffer);
+				free(line);	
+				return (NULL);
+			}
+			check = 1;
+		}
 		if (check_for_nl(buffer) == -2 )
 		{
 			line = update_line(line, buffer, ft_strlen(buffer));
@@ -56,51 +79,40 @@ char	*get_next_line(int fd)
 		}
 		if (check_for_nl(buffer) == -1 && check)
 			line = update_line(line, buffer, ft_strlen(buffer));
-		read_size = read(fd, buffer, BUFFER_SIZE);
-		buffer[read_size] = '\0';
-		if (read_size != 0)
-			check = 1;
-		if (read_size <= 0)
-		{
-			if (ft_strlen(line))
-				return (line);
-			free(buffer);
-			free(line);
-			return (NULL);
-		}
+		check = 0;
 	}
 }
 
-int	main()
-{
-	int		fd;
+//int	main()
+//{
+//	int		fd;
 
-	fd = open("./test9000.txt", O_RDONLY);
-	char *s = "";
-	int i = 1;
+//	fd = open("./test.txt", O_RDONLY);
+//	char *s = "";
+//	int i = 1;
 
-	 while (s)
-	 { 
-		s = get_next_line(fd);
-		printf("line: [%i] %s",i, s);
-		free(s);
+//	 while (s)
+//	 { 
+//		s = get_next_line(fd);
+//		printf("line: [%i] %s",i, s);
+//		free(s);
 	
 		
 		
 		
-		//s = get_next_line(fd);
-		//printf("%s",s);
-		//free(s);
-		//s = get_next_line(fd);
-		//printf("%s",s);
-		//free(s);
+//		//s = get_next_line(fd);
+//		//printf("%s",s);
+//		//free(s);
+//		//s = get_next_line(fd);
+//		//printf("%s",s);
+//		//free(s);
 		
 		
 		
-	 	i++;	
-	 }
-	// puts(str);
-	//free(s);
+//	 	i++;	
+//	 }
+//	// puts(str);
+//	//free(s);
 	
-	close(fd);
-}
+//	close(fd);
+//}
