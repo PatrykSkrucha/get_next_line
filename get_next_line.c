@@ -3,24 +3,21 @@
 char	*get_next_line(int fd)
 {
 	static char	*buffer;
-	char 		*line;
-	int 		read_size;
-	int			check;
+	char		*line;
+	int			read_size;
 
-	if (read(fd,0,0) < 0 || BUFFER_SIZE <= 0)
+	if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	read_size = 1;
-	check = 1;
 	line = NULL;
 	if (!buffer)
 	{
-		buffer = (char*)malloc((BUFFER_SIZE + 1) * sizeof(char));
+		buffer = malloc(BUFFER_SIZE + 1);
 		buffer[0] = '\0';
-		check = 0;
 	}
-	if(!buffer)
+	if (!buffer)
 		return (NULL);
-	line = get_line(read_size, buffer, fd, check, line);
+	line = get_line(read_size, buffer, fd, line);
 	if (!ft_strlen(buffer))
 	{
 		free(buffer);
@@ -32,7 +29,6 @@ char	*get_next_line(int fd)
 //int	main()
 //{
 //	int		fd;
-
 //	fd = open("test.txt", O_RDONLY);
 //	char *s = "";
 //	int i = 1;
@@ -55,24 +51,16 @@ char	*get_next_line(int fd)
 //		//free(s);
 //		//s = get_next_line(fd);
 //		//printf("line: [%i] %s",i, s);
-//		//free(s);
-	
-		
-		
-		
+//		//free(s);	
 //		//s = get_next_line(fd);
 //		//printf("%s",s);
 //		//free(s);
 //		//s = get_next_line(fd);
 //		//printf("%s",s);
-//		//free(s);
-		
-		
-		
+//		//free(s);	
 //	 	i++;	
 //	 }
 //	// puts(str);
 //	//free(s);
-	
 //	close(fd);
 //}

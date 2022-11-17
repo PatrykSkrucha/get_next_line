@@ -42,23 +42,22 @@ char	*update_line(char *s1, char *s2, int len)
 	return (str);
 }
 
-void update_buffer(char *buffer, int nlpos)
+void	update_buffer(char *buffer, int nlpos)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (buffer[nlpos + i])
 	{
 		buffer[i] = buffer[nlpos + i];
 		i++;
 	}
-
 	buffer[i] = '\0';
 }
 
-int check_for_nl(char *str)
+int	check_for_nl(char *str)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (str[len])
@@ -74,29 +73,25 @@ int check_for_nl(char *str)
 	return (-1);
 }
 
-char	*get_line(int read_size, char *buffer, int fd, int check, char *line)
+char	*get_line(int read_size, char *buffer, int fd, char *line)
 {
 	while (read_size > 0)
 	{
-		if (check)
+		if (check_for_nl(buffer) == -2 && ft_strlen(buffer))
 		{
-			if (check_for_nl(buffer) == -2 )
-			{
-				line = update_line(line, buffer, ft_strlen(buffer));
-				buffer[0] = 0;
-				return (line);
-			}
-			if (check_for_nl(buffer) >= 0)
-			{		
-				line = update_line(line, buffer, check_for_nl(buffer) + 1);
-				update_buffer(buffer, check_for_nl(buffer) + 1);
-				return (line);
-			}
-			if (check_for_nl(buffer) == -1)
-				line = update_line(line, buffer, ft_strlen(buffer));
+			line = update_line(line, buffer, ft_strlen(buffer));
+			buffer[0] = 0;
+			return (line);
 		}
+		if (check_for_nl(buffer) >= 0 && ft_strlen(buffer))
+		{		
+			line = update_line(line, buffer, check_for_nl(buffer) + 1);
+			update_buffer(buffer, check_for_nl(buffer) + 1);
+			return (line);
+		}
+		if (check_for_nl(buffer) == -1 && ft_strlen(buffer))
+			line = update_line(line, buffer, ft_strlen(buffer));
 		read_size = read(fd, buffer, BUFFER_SIZE);
-		check = 1;
 		buffer[read_size] = '\0';
 	}
 	return (line);
