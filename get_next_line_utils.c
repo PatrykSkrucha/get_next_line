@@ -15,65 +15,89 @@ int	ft_strlen(char *str)
 	return (counter);
 }
 
-void	ft_strlcpy(char *dest, char *src, int size)
-{
-	int	i;
-
-	i = 0;
-	if (size != 0)
-	{
-		while (src [i] != '\0' && i < size - 1)
-		{
-			dest[i] = src[i];
-			i++;
-		}
-		dest[i] = '\0';
-	}
-}
-
 char	*update_line(char *s1, char *s2, int len)
 {
 	char	*str;
 	int		s1_len;
+	int		i;
 
+	i = 0;
 	s1_len = ft_strlen(s1);
-	str = (char *)malloc(s1_len + len + 1);
+	str = malloc(s1_len + len + 1);
 	if (str == NULL)
 		return (NULL);
-	ft_strlcpy(str, s1, s1_len + 1);
-	ft_strlcpy(str + s1_len, s2, len + 1);
+	while (i < s1_len && s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	i = 0;
+	while (i < len)
+	{
+		str[s1_len + i] = s2[i];
+		i++;
+	}
+	str[s1_len + i] = '\0';
 	free(s1);
 	return (str);
 }
 
 void update_buffer(char *buffer, int nlpos)
 {
-	//char	*new_buffer;
-	//int len = ft_strlen(buffer+nlpos);
-int i=0;
-	//new_buffer = (char*)malloc((BUFFER_SIZE + 1) * sizeof(char));
-	//if (!new_buffer)
-	//	return (NULL);
-	//ft_strlcpy(new_buffer, buffer + nlpos, len + 1);
-	//free(buffer);
-	while(buffer[nlpos+i])
+	int i;
+	
+	i = 0;
+	while (buffer[nlpos + i])
 	{
 		buffer[i] = buffer[nlpos + i];
 		i++;
 	}
 
 	buffer[i] = '\0';
-	//return (new_buffer);
 }
 
-//void update_buffer(char *buffer, int nlpos)
-//{
-//	int		i;
-	
-//	i = 0;;
-//	while(buffer[nlpos+i] != '\0')
-//	{
-//		buffer[i] = buffer[nlpos + i ];
-//		i++;
-//	}
-//}
+int check_for_nl(char *str)
+{
+	int len;
+
+	len = 0;
+	while (str[len])
+	{	
+		if (str[len] == '\n' && len + 1 == ft_strlen(str))
+		{
+			return (-2);
+		}
+		if (str[len] == '\n')
+			return (len);
+		len++;
+	}
+	return (-1);
+}
+
+char	*get_line(int read_size, char *buffer, int fd, int check, char *line)
+{
+	while (read_size > 0)
+	{
+		if (check)
+		{
+			if (check_for_nl(buffer) == -2 )
+			{
+				line = update_line(line, buffer, ft_strlen(buffer));
+				buffer[0] = 0;
+				return (line);
+			}
+			if (check_for_nl(buffer) >= 0)
+			{		
+				line = update_line(line, buffer, check_for_nl(buffer) + 1);
+				update_buffer(buffer, check_for_nl(buffer) + 1);
+				return (line);
+			}
+			if (check_for_nl(buffer) == -1)
+				line = update_line(line, buffer, ft_strlen(buffer));
+		}
+		read_size = read(fd, buffer, BUFFER_SIZE);
+		check = 1;
+		buffer[read_size] = '\0';
+	}
+	return (line);
+}
