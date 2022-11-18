@@ -1,27 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pskrucha <pskrucha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/18 12:32:44 by pskrucha          #+#    #+#             */
+/*   Updated: 2022/11/18 17:59:48 by pskrucha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
+#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
 	static char	*buffer;
 	char		*line;
-	int			read_size;
 
 	if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
+	{
+		if (buffer)
+			free(buffer);
+		buffer = NULL;
 		return (NULL);
-	read_size = 1;
-	line = NULL;
+	}
 	if (!buffer)
 	{
 		buffer = malloc(BUFFER_SIZE + 1);
+		if (!buffer)
+			return (NULL);
 		buffer[0] = '\0';
 	}
-	if (!buffer)
-		return (NULL);
-	line = get_line(read_size, buffer, fd, line);
+	line = NULL;
+	line = read_line(buffer, fd, line);
 	if (!ft_strlen(buffer))
 	{
 		free(buffer);
-		buffer = 0;
+		buffer = NULL;
 	}
 	return (line);
 }
@@ -32,7 +48,7 @@ char	*get_next_line(int fd)
 //	fd = open("test.txt", O_RDONLY);
 //	char *s = "";
 //	int i = 1;
-//	printf("fd: %i", fd);
+//	//printf("fd: %i", fd);
 //	if(fd < 0)
 //	{
 //		printf("File opening unsuccessful!\n");

@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pskrucha <pskrucha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/18 12:33:28 by pskrucha          #+#    #+#             */
+/*   Updated: 2022/11/18 12:33:28 by pskrucha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
+#include <stdio.h>
 
 int	ft_strlen(char *str)
 {
@@ -15,31 +28,32 @@ int	ft_strlen(char *str)
 	return (counter);
 }
 
-char	*update_line(char *s1, char *s2, int len)
+char	*update_line(char *old_line, char *buffer, int len)
 {
-	char	*str;
-	int		s1_len;
+	char	*new_line;
+	int		old_line_size;
 	int		i;
 
 	i = 0;
-	s1_len = ft_strlen(s1);
-	str = malloc(s1_len + len + 1);
-	if (str == NULL)
+	old_line_size = ft_strlen(old_line);
+	new_line = malloc(old_line_size + len + 1);
+	if (new_line == NULL)
 		return (NULL);
-	while (i < s1_len && s1[i])
+	while (i < old_line_size && old_line[i])
 	{
-		str[i] = s1[i];
+		new_line[i] = old_line[i];
 		i++;
 	}
 	i = 0;
 	while (i < len)
 	{
-		str[s1_len + i] = s2[i];
+		new_line[old_line_size + i] = buffer[i];
 		i++;
 	}
-	str[s1_len + i] = '\0';
-	free(s1);
-	return (str);
+	new_line[old_line_size + i] = '\0';
+	free(old_line);
+	old_line = NULL;
+	return (new_line);
 }
 
 void	update_buffer(char *buffer, int nlpos)
@@ -73,23 +87,26 @@ int	check_for_nl(char *str)
 	return (-1);
 }
 
-char	*get_line(int read_size, char *buffer, int fd, char *line)
+char	*read_line(char *buffer, int fd, char *line)
 {
+	int	read_size;
+
+	read_size = 1;
 	while (read_size > 0)
 	{
-		if (check_for_nl(buffer) == -2 && ft_strlen(buffer))
+		if (ft_strlen(buffer) && check_for_nl(buffer) == -2)
 		{
 			line = update_line(line, buffer, ft_strlen(buffer));
 			buffer[0] = 0;
 			return (line);
 		}
-		if (check_for_nl(buffer) >= 0 && ft_strlen(buffer))
+		if (ft_strlen(buffer) && check_for_nl(buffer) >= 0)
 		{		
 			line = update_line(line, buffer, check_for_nl(buffer) + 1);
 			update_buffer(buffer, check_for_nl(buffer) + 1);
 			return (line);
 		}
-		if (check_for_nl(buffer) == -1 && ft_strlen(buffer))
+		if (ft_strlen(buffer) && check_for_nl(buffer) == -1)
 			line = update_line(line, buffer, ft_strlen(buffer));
 		read_size = read(fd, buffer, BUFFER_SIZE);
 		buffer[read_size] = '\0';

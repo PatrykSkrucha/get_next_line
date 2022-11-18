@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pskrucha <pskrucha@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/18 12:33:52 by pskrucha          #+#    #+#             */
+/*   Updated: 2022/11/18 17:52:42 by pskrucha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
@@ -17,6 +29,6 @@ int		check_for_nl(char *str);
 char	*get_next_line(int fd);
 void	update_buffer(char *buffer, int nlpos);
 char	*update_line(char *s1, char *s2, int len);
-char	*get_line(int read_size, char *buffer, int fd, char *line);
+char	*read_line(char *buffer, int fd, char *line);
 
 #endif
