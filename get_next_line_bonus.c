@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pskrucha <pskrucha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/18 12:32:44 by pskrucha          #+#    #+#             */
-/*   Updated: 2022/11/18 18:12:24 by pskrucha         ###   ########.fr       */
+/*   Created: 2022/11/18 18:13:07 by pskrucha          #+#    #+#             */
+/*   Updated: 2022/11/18 18:21:28 by pskrucha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,37 +15,39 @@
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
-	char		*line;
+	static char	*buffer[1024];
+	char		*line[1024];
 
 	if (read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
 	{
-		if (buffer)
-			free(buffer);
-		buffer = NULL;
+		if (buffer[fd])
+			free(buffer[fd]);
+		buffer[fd] = NULL;
 		return (NULL);
 	}
-	if (!buffer)
+	if (!buffer[fd])
 	{
-		buffer = malloc(BUFFER_SIZE + 1);
-		if (!buffer)
+		buffer[fd] = malloc(BUFFER_SIZE + 1);
+		if (!buffer[fd])
 			return (NULL);
-		buffer[0] = '\0';
+		buffer[fd][0] = '\0';
 	}
-	line = NULL;
-	line = read_line(buffer, fd, line);
-	if (!ft_strlen(buffer))
+	line[fd] = NULL;
+	line[fd] = read_line(buffer[fd], fd, line[fd]);
+	if (!ft_strlen(buffer[fd]))
 	{
-		free(buffer);
-		buffer = NULL;
+		free(buffer[fd]);
+		buffer[fd] = NULL;
 	}
-	return (line);
+	return (line[fd]);
 }
 
 //int	main()
 //{
 //	int		fd;
+//	int		fd1;
 //	fd = open("test.txt", O_RDONLY);
+//	fd1 = open("read_error.txt", O_RDONLY);
 //	char *s = "";
 //	int i = 1;
 //	//printf("fd: %i", fd);
@@ -57,6 +59,15 @@ char	*get_next_line(int fd)
 //	 while (s)
 //	 { 
 //		s = get_next_line(fd);
+//		printf("line: [%i] %s",i, s);
+//		free(s);
+//		s = get_next_line(fd1);
+//		printf("line: [%i] %s",i, s);
+//		free(s);
+//		s = get_next_line(fd);
+//		printf("line: [%i] %s",i, s);
+//		free(s);
+//		s = get_next_line(fd1);
 //		printf("line: [%i] %s",i, s);
 //		free(s);
 //		//s = get_next_line(fd);
@@ -79,4 +90,5 @@ char	*get_next_line(int fd)
 //	// puts(str);
 //	//free(s);
 //	close(fd);
+//	close(fd1);
 //}
