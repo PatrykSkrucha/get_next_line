@@ -6,7 +6,7 @@
 /*   By: pskrucha <pskrucha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 12:33:52 by pskrucha          #+#    #+#             */
-/*   Updated: 2022/11/18 17:52:42 by pskrucha         ###   ########.fr       */
+/*   Updated: 2022/11/19 14:39:26 by pskrucha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
 # endif
 
 int		ft_strlen(char *str);
-void	ft_strlcpy(char *dest, char *src, int size);
-int		check_for_nl(char *str);
 char	*get_next_line(int fd);
+int		check_for_nl(char *str);
 void	update_buffer(char *buffer, int nlpos);
 char	*update_line(char *s1, char *s2, int len);
+void	ft_strlcpy(char *dest, char *src, int size);
 char	*read_line(char *buffer, int fd, char *line);
 
 #endif

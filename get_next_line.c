@@ -6,12 +6,11 @@
 /*   By: pskrucha <pskrucha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 12:32:44 by pskrucha          #+#    #+#             */
-/*   Updated: 2022/11/18 18:12:24 by pskrucha         ###   ########.fr       */
+/*   Updated: 2022/11/19 14:44:24 by pskrucha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
@@ -41,42 +40,3 @@ char	*get_next_line(int fd)
 	}
 	return (line);
 }
-
-//int	main()
-//{
-//	int		fd;
-//	fd = open("test.txt", O_RDONLY);
-//	char *s = "";
-//	int i = 1;
-//	//printf("fd: %i", fd);
-//	if(fd < 0)
-//	{
-//		printf("File opening unsuccessful!\n");
-//		return (-2);
-//	}
-//	 while (s)
-//	 { 
-//		s = get_next_line(fd);
-//		printf("line: [%i] %s",i, s);
-//		free(s);
-//		//s = get_next_line(fd);
-//		//printf("line: [%i] %s",i, s);
-//		//free(s);
-//		//s = get_next_line(fd);
-//		//printf("line: [%i] %s",i, s);
-//		//free(s);
-//		//s = get_next_line(fd);
-//		//printf("line: [%i] %s",i, s);
-//		//free(s);	
-//		//s = get_next_line(fd);
-//		//printf("%s",s);
-//		//free(s);
-//		//s = get_next_line(fd);
-//		//printf("%s",s);
-//		//free(s);	
-//	 	i++;	
-//	 }
-//	// puts(str);
-//	//free(s);
-//	close(fd);
-//}
