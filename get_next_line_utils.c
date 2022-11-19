@@ -35,7 +35,7 @@ char	*update_line(char *old_line, char *buffer, int len)
 	if (!new_line)
 		return (NULL);
 	i = 0;
-	while (i < old_line_size && old_line[i])
+	while (i < old_line_size)
 	{
 		new_line[i] = old_line[i];
 		i++;
