@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
 {
@@ -33,7 +33,7 @@ char	*get_next_line(int fd)
 	}
 	line[fd] = NULL;
 	line[fd] = read_line(buffer[fd], fd, line[fd]);
-	if (!ft_strlen(buffer[fd]))
+	if (!ft_strlen(buffer[fd]) || !line[fd])
 	{
 		free(buffer[fd]);
 		buffer[fd] = NULL;

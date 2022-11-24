@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	ft_strlen(char *str)
 {
@@ -33,19 +33,19 @@ char	*update_line(char *old_line, char *buffer, int len)
 	old_line_size = ft_strlen(old_line);
 	new_line = malloc(old_line_size + len + 1);
 	if (!new_line)
+	{
+		free(old_line);
 		return (NULL);
+	}
 	i = 0;
 	while (i < old_line_size)
 	{
 		new_line[i] = old_line[i];
 		i++;
 	}
-	i = 0;
-	while (i < len)
-	{
+	i = -1;
+	while (++i < len)
 		new_line[old_line_size + i] = buffer[i];
-		i++;
-	}
 	new_line[old_line_size + i] = '\0';
 	free(old_line);
 	old_line = NULL;

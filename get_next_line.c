@@ -33,7 +33,7 @@ char	*get_next_line(int fd)
 	}
 	line = NULL;
 	line = read_line(buffer, fd, line);
-	if (!ft_strlen(buffer))
+	if (!ft_strlen(buffer) || !line)
 	{
 		free(buffer);
 		buffer = NULL;
